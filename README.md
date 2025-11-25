@@ -1,6 +1,7 @@
 # ShellPrograming
 리눅스 환경에서 간단한 쉘 프로그램 구현
-# 프로젝트 디렉토리 구조
+
+```text
 프로젝트/
 ├── bin/                 # 컴파일된 실행 파일이 저장될 곳
 ├── obj/                 # .o (목적 파일)들이 저장될 곳 (Makefile 관리용)
@@ -12,7 +13,7 @@
 │   ├── core/            # 쉘의 핵심 기능 구현
 │   │   ├── parser.c     # 입력 문자열 파싱 (파이프, 리다이렉션, 백그라운드 기호 처리)
 │   │   ├── executor.c   # 실제 명령 실행 (fork, exec, pipe, redirection 처리)
-│   │   └── signal.c     # 시그널 핸들러 (SIGINT, SIGQUIT 등 처리) - 요구사항 3번
+│   │   └── signal.c     # 시그널 핸들러 (SIGINT, SIGQUIT 등 처리)
 │   ├── builtins/        # 쉘 내장 명령어 (쉘 상태를 변경해야 하는 것들)
 │   │   ├── cd.c         # 요구사항 5번 (cd)
 │   │   └── exit.c       # 요구사항 1번 (exit)
