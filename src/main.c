@@ -8,8 +8,17 @@ int main() {
 	while (1) {
 		printf("Yum_Seoal_Shell>>");
 
-		gets(buf);
-		clearerr(stdin);
+		//stdin이 닫히거나 에러가 나면(Ctrl+D 등) 루프 종료
+		if(fgets(buf, sizeof(buf), stdin) == NULL) {
+			break;
+		}
+		
+		if (buf[strlen(buf) - 1] == '\n') {
+            buf[strlen(buf) - 1] = '\0';
+        }
+
+		// 엔터만 쳤을 때 재입력 받기
+        if (strlen(buf) == 0) continue;
 
 		narg = getargs(buf, argv);
 
