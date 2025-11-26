@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <signal.h>
 
 #define MAX_BUF 256
 #define MAX_ARG 50
@@ -16,5 +17,7 @@ int getargs(char *cmd, char **argv);
 void execute_command(char **argv);
 
 void check_exit(char **argv);
+
+void setup_signals();
 
 #endif
