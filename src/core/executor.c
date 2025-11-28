@@ -1,5 +1,8 @@
 /* src/core/executor.c */
 #include "../../include/shell.h"
+#include "../../include/commands.h"
+#include <string.h>
+#include <stdlib.h>
 
 int handle_redirection(char **argv) {
     int i;
@@ -36,6 +39,29 @@ int handle_redirection(char **argv) {
     }
     return 0; // 성공적으로 리다이렉션 처리됨
 }
+
+//실제 명령어를 실행하는 내부 함수
+void dispatch_cmd(char **argv) {
+    // 1. 팀원이 구현한 명령어 연결 (Hooking)
+    if (strcmp(argv[0], "ls") == 0) {
+        myshell_ls(argv);
+        exit(0); // [중요] 실행 후 반드시 종료
+    }
+    /* 나중에 cp 등이 추가되면 주석 해제
+    else if (strcmp(argv[0], "cp") == 0) {
+        myshell_cp(argv);
+        exit(0);
+    }
+    */
+
+    // 2. 우리가 구현 안 한 건 시스템 명령어로 실행
+    execvp(argv[0], argv);
+    perror("command execution failed");
+    exit(1);
+}
+
+
+
 void execute_command(char **argv) {
     pid_t pid;
     int background = 0; // 백그라운드 실행 여부 플래그
@@ -79,15 +105,14 @@ void execute_command(char **argv) {
 
         // 첫 번째 자식 (Write)
         pid1 = fork();
+
         if (pid1 == 0) {
             close(fd[0]);
             dup2(fd[1], STDOUT_FILENO);
             close(fd[1]);
             
-            handle_redirection(argv1); // 재지향 처리
-            execvp(argv1[0], argv1);
-            perror("exec1 failed");
-            exit(1);
+           if (handle_redirection(argv1) < 0) exit(1);
+            dispatch_cmd(argv1); // execvp 대신 dispatch_cmd 호출
         }
 
         // 두 번째 자식 (Read)
@@ -97,10 +122,8 @@ void execute_command(char **argv) {
             dup2(fd[0], STDIN_FILENO);
             close(fd[0]);
 
-            handle_redirection(argv2); // 재지향 처리
-            execvp(argv2[0], argv2);
-            perror("exec2 failed");
-            exit(1);
+          if (handle_redirection(argv2) < 0) exit(1);
+            dispatch_cmd(argv2); // execvp 대신 dispatch_cmd 호출
         }
 
         // 부모 프로세스
@@ -115,20 +138,14 @@ void execute_command(char **argv) {
         }
     }
     // ==========================================
-    // CASE B: 파이프가 없는 일반 실행 (기존 로직 + 재지향 추가)
+    // CASE B: 파이프가 없는 일반 실행
     // ==========================================
     else {
         pid = fork();
         
         if (pid == 0) {
-            // [중요] 자식 프로세스에서 재지향 처리 함수 호출
-            if (handle_redirection(argv) < 0) {
-                exit(1); // 파일 열기 실패 시 종료
-            }
-
-            execvp(argv[0], argv);
-            perror("exec failed");
-            exit(1);
+            if (handle_redirection(argv) < 0) exit(1);
+                dispatch_cmd(argv); // execvp 대신 dispatch_cmd 호출
         } else if (pid > 0) {
             if (background == 0) {
                 // 부모 프로세스

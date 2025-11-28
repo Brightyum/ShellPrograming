@@ -19,7 +19,8 @@ SRCS = $(SRCDIR)/main.c \
        $(SRCDIR)/core/executor.c \
        $(SRCDIR)/builtins/exit.c \
 	   $(SRCDIR)/core/signal.c\
-	   $(SRCDIR)/builtins/cd.c
+	   $(SRCDIR)/builtins/cd.c\
+	   $(SRCDIR)/commands/cmd_ls.c
 
 # 오브젝트 파일 목록 자동 생성 (.c -> .o)
 # 예: src/main.c -> obj/main.o
