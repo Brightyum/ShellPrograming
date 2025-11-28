@@ -41,6 +41,12 @@ int main() {
 
 		check_exit(argv);
 
+		//cd 체크
+        if (strcmp(argv[0], "cd") == 0) {
+            myshell_cd(argv);
+            continue; // cd를 실행했으면 fork하러 가지 말고 루프 처음으로
+        }
+
 		execute_command(argv);
 	}
 	return 0;

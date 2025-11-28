@@ -21,4 +21,6 @@ void check_exit(char **argv);
 
 void setup_signals();
 
+void myshell_cd(char **argv);
+
 #endif
