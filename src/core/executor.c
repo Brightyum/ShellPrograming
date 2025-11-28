@@ -45,14 +45,44 @@ void dispatch_cmd(char **argv) {
     // 1. 팀원이 구현한 명령어 연결 (Hooking)
     if (strcmp(argv[0], "ls") == 0) {
         myshell_ls(argv);
-        exit(0); // [중요] 실행 후 반드시 종료
+        exit(0); //실행 후 반드시 종료
     }
-    /* 나중에 cp 등이 추가되면 주석 해제
+    else if (strcmp(argv[0], "pwd") == 0) {
+        myshell_pwd(argv);
+        exit(0);
+    }
+    else if (strcmp(argv[0], "mkdir") == 0) {
+        myshell_mkdir(argv);
+        exit(0);
+    }
+    else if (strcmp(argv[0], "rmdir") == 0) {
+        myshell_rmdir(argv);
+        exit(0);
+    }
+    else if (strcmp(argv[0], "ln") == 0) {
+        myshell_ln(argv);
+        exit(0);
+    }
     else if (strcmp(argv[0], "cp") == 0) {
         myshell_cp(argv);
         exit(0);
     }
-    */
+    else if (strcmp(argv[0], "rm") == 0) {
+        myshell_rm(argv);
+        exit(0);
+    }
+    else if (strcmp(argv[0], "mv") == 0) {
+        myshell_mv(argv);
+        exit(0);
+    }
+    else if (strcmp(argv[0], "cat") == 0) {
+        myshell_cat(argv);
+        exit(0);
+    }
+    else if (strcmp(argv[0], "grep") == 0) {
+        myshell_grep(argv);
+        exit(0);
+    }
 
     // 2. 우리가 구현 안 한 건 시스템 명령어로 실행
     execvp(argv[0], argv);
