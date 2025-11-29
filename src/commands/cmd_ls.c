@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <dirent.h>     // 디렉토리 처리를 위한 헤더
 #include <sys/types.h>
+#include <unistd.h> 
 #include "../../include/commands.h"
 
 void myshell_ls(char **argv) {
@@ -23,12 +24,17 @@ void myshell_ls(char **argv) {
         return;
     }
 
+    int is_terminal = isatty(STDOUT_FILENO);
+
     // 3. 내용물 읽어서 출력하기
     while ((entry = readdir(dp)) != NULL) {
-        // 숨김 파일(점으로 시작)은 굳이 안 보여줘도 되지만 일단 다 출력
-        printf("%s  ", entry->d_name);
+        if (is_terminal) {
+            // 숨김 파일(점으로 시작)은 굳이 안 보여줘도 되지만 일단 다 출력
+            printf("%s ", entry->d_name);
+        } else {
+            printf("%s\n", entry->d_name);
+        }
     }
-    printf("\n"); // 줄바꿈
 
     // 4. 디렉토리 닫기
     closedir(dp);

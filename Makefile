@@ -43,7 +43,8 @@ directories:
 	@mkdir -p $(BINDIR)
 	@mkdir -p $(OBJDIR)/core
 	@mkdir -p $(OBJDIR)/builtins
-
+	@mkdir -p $(OBJDIR)/commands
+	
 # 실행 파일 링크
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^

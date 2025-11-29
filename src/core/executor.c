@@ -3,6 +3,10 @@
 #include "../../include/commands.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/wait.h>
 
 int handle_redirection(char **argv) {
     int i;
